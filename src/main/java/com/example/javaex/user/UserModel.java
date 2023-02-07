@@ -41,6 +41,11 @@ public class UserModel implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<SimpleGrantedAuthority> authorities;
 
+    private boolean isAccountNonExpired ;
+    private boolean isAccountNonLocked ;
+    private boolean isCredentialsNonExpired ;
+    private boolean isEnabled ;
+
     @Override
     public String getUsername() {
         return null;

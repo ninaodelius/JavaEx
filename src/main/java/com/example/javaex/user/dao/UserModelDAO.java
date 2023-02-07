@@ -1,7 +1,9 @@
 package com.example.javaex.user.dao;
 
+import com.example.javaex.config.AppPasswordConfig;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelRepository;
+import com.example.javaex.user.auth.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +14,12 @@ import java.util.Optional;
 public class UserModelDAO implements IUserModelDAO<UserModel>{
 
     private final UserModelRepository userModelRepository;
+    private final AppPasswordConfig appPasswordConfig;
 
     @Autowired
-    public UserModelDAO(UserModelRepository userModelRepository){
+    public UserModelDAO(UserModelRepository userModelRepository, AppPasswordConfig appPasswordConfig){
         this.userModelRepository = userModelRepository;
+        this.appPasswordConfig = appPasswordConfig;
     }
 
 
@@ -26,6 +30,19 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
 
     @Override
     public UserModel save(UserModel userModel) {
+        userModel.setPassword(appPasswordConfig.bCryptPassword().encode(userModel.getPassword()));
+        userModel.setAccountNonExpired(true);
+        userModel.setAccountNonLocked(true);
+        userModel.setCredentialsNonExpired(true);
+        userModel.setEnabled(true);
+
+
+        String role = String.valueOf(userModel.getAuthorities().iterator().next());
+
+        switch (role) {
+            case "ADMIN" ->  userModel.setAuthorities(UserRoles.ADMIN.getGrantedAuthorities());
+            case "FLASH" -> userModel.setAuthorities(UserRoles.USER.getGrantedAuthorities());
+        }
         return userModelRepository.save(userModel);
     }
 
@@ -61,6 +78,11 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
         if (userModel.getName() != null) { userToUpdate.setName(userModel.getName()); }
         if (userModel.getEmail() != null) { userToUpdate.setEmail(userModel.getEmail()); }
         if (userModel.getPassword() != null) { userToUpdate.setPassword(userModel.getPassword()); }
+
+        userToUpdate.setAccountNonExpired(true);
+        userToUpdate.setAccountNonLocked(true);
+        userToUpdate.setCredentialsNonExpired(true);
+        userToUpdate.setEnabled(true);
 
         userModelRepository.save(userToUpdate);
     }
