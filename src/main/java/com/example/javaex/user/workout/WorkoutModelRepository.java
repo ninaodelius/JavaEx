@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WorkoutModelRepository extends JpaRepository<WorkoutModel, Long> {
+    WorkoutModel findByWorkoutCategory(String name);
 }
