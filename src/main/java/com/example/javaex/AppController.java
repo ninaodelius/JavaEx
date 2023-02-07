@@ -4,8 +4,7 @@ import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelDetailsService;
 import com.example.javaex.user.workout.WorkoutModelDetailsService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +29,14 @@ public class AppController {
         return userModelDetailsService.findById(id);
     }
 
+    @PostMapping()
+    public UserModel saveNewUser(UserModel userModel){ return userModelDetailsService.save(userModel);}
 
+    @DeleteMapping("{id}")
+    public void deleteUserById(@PathVariable("id")Long id){ userModelDetailsService.delete(id);}
+
+    @PutMapping("{id}")
+    public void updateUserById(@PathVariable("id")Long id, @RequestBody UserModel userModel){
+        userModelDetailsService.updateUser(id,userModel);
+    }
 }

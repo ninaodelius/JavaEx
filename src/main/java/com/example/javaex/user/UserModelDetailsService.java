@@ -19,8 +19,8 @@ public class UserModelDetailsService implements UserDetailsService {
         return userModelDAO.findUser(name);
     }
 
-    public void save(UserModel userModel){
-    userModelDAO.save(userModel);
+    public UserModel save(UserModel userModel){
+    return userModelDAO.save(userModel);
     }
 
     public void delete(Long id){
@@ -38,5 +38,9 @@ public class UserModelDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         return userModelDAO.findUser(name);
+    }
+
+    public void updateUser(Long id, UserModel userModel){
+        userModelDAO.updateUser(id,userModel);
     }
 }

@@ -25,8 +25,8 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
     }
 
     @Override
-    public void save(UserModel userModel) {
-        userModelRepository.save(userModel);
+    public UserModel save(UserModel userModel) {
+        return userModelRepository.save(userModel);
     }
 
     @Override
@@ -51,5 +51,17 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
             throw new RuntimeException("Did not find id: " + id);
         }
         return foundUser;
+    }
+
+    @Override
+    public void updateUser(Long id, UserModel userModel){
+
+        UserModel userToUpdate = findById(id);
+
+        if (userModel.getName() != null) { userToUpdate.setName(userModel.getName()); }
+        if (userModel.getEmail() != null) { userToUpdate.setEmail(userModel.getEmail()); }
+        if (userModel.getPassword() != null) { userToUpdate.setPassword(userModel.getPassword()); }
+
+        userModelRepository.save(userToUpdate);
     }
 }
