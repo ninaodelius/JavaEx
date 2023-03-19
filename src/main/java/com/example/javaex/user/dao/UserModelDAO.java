@@ -3,7 +3,6 @@ package com.example.javaex.user.dao;
 import com.example.javaex.config.AppPasswordConfig;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelRepository;
-import com.example.javaex.user.auth.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,21 +28,9 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
     }
 
     @Override
-    public UserModel save(UserModel userModel) {
-        userModel.setPassword(appPasswordConfig.bCryptPassword().encode(userModel.getPassword()));
-        userModel.setAccountNonExpired(true);
-        userModel.setAccountNonLocked(true);
-        userModel.setCredentialsNonExpired(true);
-        userModel.setEnabled(true);
+    public void save(UserModel userModel) {
 
-
-        String role = String.valueOf(userModel.getAuthorities().iterator().next());
-
-        switch (role) {
-            case "ADMIN" ->  userModel.setAuthorities(UserRoles.ADMIN.getGrantedAuthorities());
-            case "FLASH" -> userModel.setAuthorities(UserRoles.USER.getGrantedAuthorities());
-        }
-        return userModelRepository.save(userModel);
+        userModelRepository.save(userModel);
     }
 
     @Override
@@ -76,7 +63,7 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
         UserModel userToUpdate = findById(id);
 
         if (userModel.getName() != null) { userToUpdate.setName(userModel.getName()); }
-        if (userModel.getEmail() != null) { userToUpdate.setEmail(userModel.getEmail()); }
+        if (userModel.getUsername() != null) { userToUpdate.setUsername(userModel.getUsername()); }
         if (userModel.getPassword() != null) { userToUpdate.setPassword(userModel.getPassword()); }
 
         userToUpdate.setAccountNonExpired(true);

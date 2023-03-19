@@ -1,42 +1,55 @@
 package com.example.javaex;
 
+import com.example.javaex.config.AppPasswordConfig;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelDetailsService;
 import com.example.javaex.user.workout.WorkoutModelDetailsService;
-import org.springframework.stereotype.Controller;
+import com.example.javaex.weatherAPI.WeatherWebClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@CrossOrigin
+@RestController /*RestController for postman*/
+@RequestMapping("/api")
 public class AppController {
 
     private final UserModelDetailsService userModelDetailsService;
     private final WorkoutModelDetailsService workoutModelDetailsService;
+    private final WeatherWebClient weatherWebClient;
+    private final AppPasswordConfig appPasswordConfig;
 
-    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService) {
+    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService, WeatherWebClient weatherWebClient, AppPasswordConfig appPasswordConfig) {
         this.userModelDetailsService = userModelDetailsService;
         this.workoutModelDetailsService = workoutModelDetailsService;
+        this.weatherWebClient = weatherWebClient;
+        this.appPasswordConfig = appPasswordConfig;
     }
 
-    @GetMapping
+    @GetMapping()
     public List<UserModel> listAllUsers(){
         return userModelDetailsService.findAll();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public UserModel findUserById(@PathVariable("id") Long id){
         return userModelDetailsService.findById(id);
     }
 
-    @PostMapping()
-    public UserModel saveNewUser(UserModel userModel){ return userModelDetailsService.save(userModel);}
+    @PostMapping("/save")
+    public void saveNewUser(@RequestBody UserModel userModel){
+        userModelDetailsService.save(userModel);}
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable("id")Long id){ userModelDetailsService.delete(id);}
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public void updateUserById(@PathVariable("id")Long id, @RequestBody UserModel userModel){
         userModelDetailsService.updateUser(id,userModel);
+    }
+
+    @GetMapping("/test")
+    public void test(){
+        System.out.println("hello");
     }
 }
