@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//@EnableWebMvc this gave error
+//@EnableWebMvc //this gave error
 @Configuration
 public class AppViewConfig implements WebMvcConfigurer {
 
@@ -28,6 +28,8 @@ public class AppViewConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry){
-        registry.addMapping("/**");
+        registry.addMapping("/**")
+                .allowedOrigins("https://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 }

@@ -23,8 +23,8 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
 
 
     @Override
-    public UserModel findUser(String name) {
-        return userModelRepository.findByName(name);
+    public UserModel findByUsername(String username) {
+        return userModelRepository.findByUsername(username);
     }
 
     @Override

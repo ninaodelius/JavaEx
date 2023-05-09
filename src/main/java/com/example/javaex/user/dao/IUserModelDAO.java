@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IUserModelDAO<T> {
 
-    UserModel findUser(String name);
+    UserModel findByUsername(String username);
     void save(UserModel userModel);
     void delete(Long id);
     List<UserModel> findAll();

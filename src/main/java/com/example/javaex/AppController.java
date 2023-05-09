@@ -26,7 +26,7 @@ public class AppController {
         this.appPasswordConfig = appPasswordConfig;
     }
 
-    @GetMapping()
+    @GetMapping("/home")
     public List<UserModel> listAllUsers(){
         return userModelDetailsService.findAll();
     }
@@ -52,4 +52,9 @@ public class AppController {
     public void test(){
         System.out.println("hello");
     }
+
+    //@GetMapping("/signin")
+    //public void signin(@RequestParam("username") String username, @RequestParam("password") String password){
+
+    //}
 }

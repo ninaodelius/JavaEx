@@ -48,7 +48,8 @@ public class AppSecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests( requests -> {
                             try {
-                                requests.requestMatchers("/index*", "/static/**", "/*.js", "/*.json", "/*.ico", "/", "/api", "/api**", "/**", "/save", "/test").permitAll()
+                                requests.requestMatchers("/index*", "/static/**", "/*.js", "/*.json", "/*.ico", "/", "/api", "/save", "/test", "/signin", "/api**", "/**").permitAll()
+                                        .requestMatchers("/home","/perform_signin").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()
                                         .and().csrf().disable().cors().configurationSource(request -> corsConfiguration);
@@ -59,10 +60,10 @@ public class AppSecurityConfig {
                         }
                 )
                 .formLogin( formlogin -> {
-                    formlogin.loginPage("/index.html")
-                            .loginProcessingUrl("/perform_login")
-                            .defaultSuccessUrl("/homepage.html",true)
-                            .failureUrl("/index.html?error=true")
+                    formlogin.loginPage("/signin")
+                            .loginProcessingUrl("/perform_signin")
+                            .defaultSuccessUrl("/home",true)
+                            .failureUrl("/signin?error=true")
                     ;
                 }
                 )
