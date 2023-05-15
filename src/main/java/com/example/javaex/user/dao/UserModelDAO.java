@@ -1,6 +1,5 @@
 package com.example.javaex.user.dao;
 
-import com.example.javaex.config.AppPasswordConfig;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +12,15 @@ import java.util.Optional;
 public class UserModelDAO implements IUserModelDAO<UserModel>{
 
     private final UserModelRepository userModelRepository;
-    private final AppPasswordConfig appPasswordConfig;
 
     @Autowired
-    public UserModelDAO(UserModelRepository userModelRepository, AppPasswordConfig appPasswordConfig){
+    public UserModelDAO(UserModelRepository userModelRepository){
         this.userModelRepository = userModelRepository;
-        this.appPasswordConfig = appPasswordConfig;
     }
 
 
     @Override
-    public UserModel findByUsername(String username) {
+    public UserModel findUser(String username) {
         return userModelRepository.findByUsername(username);
     }
 
@@ -72,5 +69,19 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
         userToUpdate.setEnabled(true);
 
         userModelRepository.save(userToUpdate);
+    }
+
+    @Override
+    public void deleteAll() {
+        userModelRepository.deleteAll();
+    }
+
+    public List<UserModel> findByHasRegisteredWorkouts(boolean b) {
+
+        return userModelRepository.findBy(b);
+    }
+
+    public List<UserModel> findByNameContaining(String name) {
+        return userModelRepository.findByNameContaining(name);
     }
 }

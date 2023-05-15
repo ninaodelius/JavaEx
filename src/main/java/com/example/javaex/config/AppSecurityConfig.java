@@ -5,7 +5,9 @@ import com.example.javaex.user.workout.WorkoutModelDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -49,7 +51,7 @@ public class AppSecurityConfig {
                 .authorizeHttpRequests( requests -> {
                             try {
                                 requests.requestMatchers("/index*", "/static/**", "/*.js", "/*.json", "/*.ico", "/", "/api", "/save", "/test", "/signin", "/api**", "/**").permitAll()
-                                        .requestMatchers("/home","/perform_signin").hasRole("USER")
+                                        .requestMatchers("/home").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()
                                         .and().csrf().disable().cors().configurationSource(request -> corsConfiguration);
@@ -92,5 +94,10 @@ public class AppSecurityConfig {
         provider.setUserDetailsService(userModelDetailsService);
         provider.setPasswordEncoder(appPasswordConfig.bCryptPassword());
         return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }

@@ -15,7 +15,7 @@ import java.util.Set;
 public class UserModel implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usermodel_generator")
     private Long id;
 
     @NotEmpty
@@ -31,6 +31,11 @@ public class UserModel implements UserDetails {
     @Size(min = 6, max = 200)
     private String password;
 
+    //@OneToMany(mappedBy = "userModel")
+    //private Set<WorkoutModel> workoutModels;
+
+
+
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<SimpleGrantedAuthority> authorities;
 
@@ -38,11 +43,19 @@ public class UserModel implements UserDetails {
     private boolean isAccountNonLocked ;
     private boolean isCredentialsNonExpired ;
     private boolean isEnabled ;
+    private boolean hasRegisteredWorkouts ;
+    //public Set<WorkoutModel> getWorkoutModels() {
+    //    return workoutModels;
+   // }
+
+    //public void setWorkoutModels(Set<WorkoutModel> workoutModels) {
+    //    this.workoutModels = workoutModels;
+    //}
 
     //Ska ha en workoutmodel i sig
 
-    public UserModel(Long id, String name, String username, String password, Set<SimpleGrantedAuthority> authorities, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled) {
-        this.id = id;
+    public UserModel(Long id, String name, String username, String password, Set<SimpleGrantedAuthority> authorities, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled, boolean hasRegisteredWorkouts) {
+         this.id = id;
         this.name = name;
         this.username = username;
         this.password = password;
@@ -51,6 +64,7 @@ public class UserModel implements UserDetails {
         this.isAccountNonLocked = isAccountNonLocked;
         this.isCredentialsNonExpired = isCredentialsNonExpired;
         this.isEnabled = isEnabled;
+        this.hasRegisteredWorkouts = hasRegisteredWorkouts;
     }
 
     public UserModel() {
@@ -130,5 +144,13 @@ public class UserModel implements UserDetails {
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
+    }
+
+    public boolean isHasRegisteredWorkouts() {
+        return hasRegisteredWorkouts;
+    }
+
+    public void setHasRegisteredWorkouts(boolean hasRegisteredWorkouts) {
+        this.hasRegisteredWorkouts = hasRegisteredWorkouts;
     }
 }

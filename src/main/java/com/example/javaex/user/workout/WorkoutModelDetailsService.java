@@ -16,11 +16,11 @@ public class WorkoutModelDetailsService {
         this.workoutModelRepository = workoutModelRepository;
     }
 
-    public void save(WorkoutModel workoutModel){
-        workoutModelRepository.save(workoutModel);
+    public WorkoutModel save(WorkoutModel workoutModel){
+        return workoutModelRepository.save(workoutModel);
     }
 
-    public void delete(Long id){
+    public void deleteById(Long id){
         workoutModelRepository.deleteById(id);
     }
 
@@ -44,4 +44,24 @@ public class WorkoutModelDetailsService {
         return workoutModelRepository.findByWorkoutCategory(name);
     }
 
+    public List<WorkoutModel> findByUserModelId(Long userModelId) {
+        return workoutModelRepository.findByUserModelId(userModelId);
+    }
+
+    public WorkoutModel findById(Long id) {
+        Optional<WorkoutModel> result = workoutModelRepository.findById(id);
+
+        WorkoutModel foundWorkout;
+
+        if(result.isPresent()){
+            foundWorkout=result.get();
+        }else{
+            throw new RuntimeException("Did not find id: " + id);
+        }
+        return foundWorkout;
+    }
+
+    public void deleteByUserModelId(Long userModelId) {
+        workoutModelRepository.deleteByUserModelId(userModelId);
+    }
 }
