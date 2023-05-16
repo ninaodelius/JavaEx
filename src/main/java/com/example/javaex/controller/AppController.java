@@ -7,10 +7,13 @@ import com.example.javaex.user.UserModelRepository;
 import com.example.javaex.user.workout.WorkoutModel;
 import com.example.javaex.user.workout.WorkoutModelDetailsService;
 import com.example.javaex.weatherAPI.WeatherWebClient;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -50,12 +53,15 @@ private final UserModelRepository userModelRepository;
     }*/
 
     @GetMapping("/signup")
-    public String showSaveNewUser(@RequestBody UserModel userModel){
+    public String showSaveNewUser(UserModel userModel){
         return "signup";
     }
 
     @PostMapping("/signup")
-    public String saveNewUser(@RequestBody UserModel userModel){
+    public String saveNewUser(@Valid UserModel userModel, BindingResult result, Model model){
+        if(result.hasErrors()){
+            return "signup";
+        }
         userModelDetailsService.save(userModel);
     return "redirect:/";
     }
