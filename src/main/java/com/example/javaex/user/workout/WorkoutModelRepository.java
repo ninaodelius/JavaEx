@@ -10,10 +10,8 @@ import java.util.List;
 public interface WorkoutModelRepository extends JpaRepository<WorkoutModel, Long> {
     WorkoutModel findByWorkoutCategory(String name);
 
-    List<WorkoutModel> findByWorkoutModelId(Long workoutModelId);
+    List<WorkoutModel> findByUserModelId(Long workoutId);
 
     @Transactional
     void deleteByUserModelId(long userModelId);
-
-    List<WorkoutModel> findByUserModelId(Long userModelId);
 }

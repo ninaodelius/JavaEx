@@ -76,9 +76,9 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
         userModelRepository.deleteAll();
     }
 
-    public List<UserModel> findByHasRegisteredWorkouts(boolean b) {
+    public List<UserModel> findByHasRegisteredWorkouts(boolean hasWorkouts) {
 
-        return userModelRepository.findBy(b);
+        return userModelRepository.findByHasRegisteredWorkouts(hasWorkouts);
     }
 
     public List<UserModel> findByNameContaining(String name) {

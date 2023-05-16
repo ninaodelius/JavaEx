@@ -89,7 +89,7 @@ public class UserModelDetailsService implements UserDetailsService {
         userModelDAO.deleteAll();
     }
 
-    public List<UserModel> findByHasRegisteredWorkouts(boolean b) {
-        return userModelDAO.findByHasRegisteredWorkouts(b);
+    public List<UserModel> findByHasRegisteredWorkouts(boolean hasWorkouts) {
+        return userModelDAO.findByHasRegisteredWorkouts(hasWorkouts);
     }
 }

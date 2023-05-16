@@ -4,6 +4,7 @@ import com.example.javaex.config.AppPasswordConfig;
 import com.example.javaex.config.HibernateAnnotationUtil;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelDetailsService;
+import com.example.javaex.user.UserModelRepository;
 import com.example.javaex.user.workout.WorkoutModel;
 import com.example.javaex.user.workout.WorkoutModelDetailsService;
 import com.example.javaex.weatherAPI.WeatherWebClient;
@@ -35,14 +36,15 @@ public class  AppController {
     private final WeatherWebClient weatherWebClient;
     private final AppPasswordConfig appPasswordConfig;
     private final AuthenticationManager authenticationManager;
-
+private final UserModelRepository userModelRepository;
     @Autowired
-    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService, WeatherWebClient weatherWebClient, AppPasswordConfig appPasswordConfig, AuthenticationManager authenticationManager) {
+    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService, WeatherWebClient weatherWebClient, AppPasswordConfig appPasswordConfig, AuthenticationManager authenticationManager, UserModelRepository userModelRepository) {
         this.userModelDetailsService = userModelDetailsService;
         this.workoutModelDetailsService = workoutModelDetailsService;
         this.weatherWebClient = weatherWebClient;
         this.appPasswordConfig = appPasswordConfig;
         this.authenticationManager = authenticationManager;
+        this.userModelRepository = userModelRepository;
     }
 
     @GetMapping("/home")
@@ -116,6 +118,9 @@ public class  AppController {
             // Redirect the user to an error page or perform any other necessary actions
         }}
 
+
+    /** User controller **/
+
         @GetMapping("/users")
         public ResponseEntity<List<UserModel>> getAllUsers(@RequestParam(required = false) String name) {
             List<UserModel> users = new ArrayList<UserModel>();
@@ -171,7 +176,7 @@ public class  AppController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        @GetMapping("/userModels/registeredWorkouts")
+        @GetMapping("/userModels/hasWorkouts")
         public ResponseEntity<List<UserModel>> findByHasRegisteredWorkouts() {
             List<UserModel> userModels = userModelDetailsService.findByHasRegisteredWorkouts(true);
 
@@ -182,6 +187,7 @@ public class  AppController {
             return new ResponseEntity<>(userModels, HttpStatus.OK);
         }
 
+        /** Workout controller **/
 
     @GetMapping("/userModels/{userModelId}/workoutModels")
     public ResponseEntity<List<WorkoutModel>> getAllWorkoutModelsByUserModelId(@PathVariable(value = "userModelId") Long userModelId) {
@@ -199,11 +205,14 @@ public class  AppController {
 
     @PostMapping("/userModels/{userModelId}/workoutModels")
     public ResponseEntity<WorkoutModel> createWorkoutModel(@PathVariable(value = "userModelId") Long userModelId,
-                                                 @RequestBody WorkoutModel workoutModelRequest) {
+                                                 @RequestBody WorkoutModel workoutModelRequest) throws Exception {
 
-        UserModel userModelToSave = userModelDetailsService.findById(userModelId);
-        WorkoutModel workoutModelToSave = workoutModelDetailsService.save(workoutModelRequest);
-        workoutModelToSave.setUserModel(userModelToSave);
+        //UserModel userModelToSave = userModelDetailsService.findById(userModelId);
+        //WorkoutModel workoutModelToSave = workoutModelDetailsService.save(workoutModelRequest);
+        //workoutModelToSave.setUserModel(userModelToSave);
+        WorkoutModel workoutModelToSave = userModelRepository.findById(userModelId).map(userModel -> {
+            workoutModelRequest.setUserModel(userModel);
+            return workoutModelDetailsService.save(workoutModelRequest);}).orElseThrow(() -> new Exception("Not found user with id = " + userModelId));
 
         return new ResponseEntity<>(workoutModelToSave, HttpStatus.CREATED);
     }

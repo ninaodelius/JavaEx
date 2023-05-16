@@ -11,6 +11,6 @@ UserModel findByUsername(String username);
 
     List<UserModel> findByNameContaining(String name);
 
-    List<UserModel> findBy(boolean hasRegisteredWorkouts);
+    List<UserModel> findByHasRegisteredWorkouts(boolean hasWorkouts);
 
 }

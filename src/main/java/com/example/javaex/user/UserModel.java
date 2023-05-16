@@ -1,5 +1,6 @@
 package com.example.javaex.user;
 
+import com.example.javaex.user.workout.WorkoutModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -20,19 +21,25 @@ public class UserModel implements UserDetails {
 
     @NotEmpty
     @Size(min = 2, max = 30)
+    @Column
     private String name;
 
     @NotEmpty
     @Size(min = 4, max = 50)
     @Email
+    @Column
     private String username;
 
     @NotEmpty
     @Size(min = 6, max = 200)
+    @Column
     private String password;
 
-    //@OneToMany(mappedBy = "userModel")
-    //private Set<WorkoutModel> workoutModels;
+    @Column
+    private boolean hasRegisteredWorkouts;
+
+    @OneToMany(mappedBy = "userModel")
+    private Set<WorkoutModel> workoutModels;
 
 
 
@@ -43,7 +50,6 @@ public class UserModel implements UserDetails {
     private boolean isAccountNonLocked ;
     private boolean isCredentialsNonExpired ;
     private boolean isEnabled ;
-    private boolean hasRegisteredWorkouts ;
     //public Set<WorkoutModel> getWorkoutModels() {
     //    return workoutModels;
    // }

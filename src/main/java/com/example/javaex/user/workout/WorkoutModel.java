@@ -24,7 +24,7 @@ public class WorkoutModel {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "usermodel_id", nullable = false)
+    @JoinColumn(name = "user_model_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private UserModel userModel;

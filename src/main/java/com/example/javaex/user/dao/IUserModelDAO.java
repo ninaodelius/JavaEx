@@ -14,4 +14,5 @@ public interface IUserModelDAO<T> {
     void updateUser(Long id, UserModel userModel);
 
     void deleteAll();
+    List<UserModel> findByHasRegisteredWorkouts(boolean hasWorkouts);
 }
