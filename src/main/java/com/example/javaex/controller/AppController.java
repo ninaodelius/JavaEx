@@ -144,14 +144,14 @@ private final UserModelRepository userModelRepository;
             return new ResponseEntity<>(userModel, HttpStatus.OK);
         }
 
-        @PostMapping("/userModels")
+        @PostMapping("/users")
         public ResponseEntity<UserModel> createUserModel(@RequestBody UserModel userModel) {
             UserModel _userModel = userModelDetailsService.save(userModel);
             return new ResponseEntity<>(_userModel, HttpStatus.CREATED);
         }
 
 
-        @PutMapping("/userModels/{id}")
+        @PutMapping("/users/{id}")
         public ResponseEntity<UserModel> updateUserModel(@PathVariable("id") long id, @RequestBody UserModel userModel) {
             UserModel _userModel = userModelDetailsService.findById(id);
 
@@ -162,21 +162,21 @@ private final UserModelRepository userModelRepository;
             return new ResponseEntity<>(userModelDetailsService.save(_userModel), HttpStatus.OK);
         }
 
-        @DeleteMapping("/userModels/{id}")
+        @DeleteMapping("/users/{id}")
         public ResponseEntity<HttpStatus> deleteUserModel(@PathVariable("id") long id) {
             userModelDetailsService.deleteById(id);
 
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        @DeleteMapping("/userModels")
+        @DeleteMapping("/users")
         public ResponseEntity<HttpStatus> deleteAllUserModels() {
             userModelDetailsService.deleteAll();
 
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        @GetMapping("/userModels/hasWorkouts")
+        @GetMapping("/users/hasWorkouts")
         public ResponseEntity<List<UserModel>> findByHasRegisteredWorkouts() {
             List<UserModel> userModels = userModelDetailsService.findByHasRegisteredWorkouts(true);
 
@@ -189,21 +189,21 @@ private final UserModelRepository userModelRepository;
 
         /** Workout controller **/
 
-    @GetMapping("/userModels/{userModelId}/workoutModels")
+    @GetMapping("/users/{userModelId}/workouts")
     public ResponseEntity<List<WorkoutModel>> getAllWorkoutModelsByUserModelId(@PathVariable(value = "userModelId") Long userModelId) {
 
         List<WorkoutModel> workoutModels = workoutModelDetailsService.findByUserModelId(userModelId);
         return new ResponseEntity<>(workoutModels, HttpStatus.OK);
     }
 
-    @GetMapping("/workoutModels/{id}")
+    @GetMapping("/workouts/{id}")
     public ResponseEntity<WorkoutModel> getWorkoutModelsByUserModelId(@PathVariable(value = "id") Long id) {
         WorkoutModel workoutModel = workoutModelDetailsService.findById(id);
 
         return new ResponseEntity<>(workoutModel, HttpStatus.OK);
     }
 
-    @PostMapping("/userModels/{userModelId}/workoutModels")
+    @PostMapping("/users/{userModelId}/workouts")
     public ResponseEntity<WorkoutModel> createWorkoutModel(@PathVariable(value = "userModelId") Long userModelId,
                                                  @RequestBody WorkoutModel workoutModelRequest) throws Exception {
 
@@ -217,7 +217,7 @@ private final UserModelRepository userModelRepository;
         return new ResponseEntity<>(workoutModelToSave, HttpStatus.CREATED);
     }
 
-    @PutMapping("/workoutModels/{id}")
+    @PutMapping("/workouts/{id}")
     public ResponseEntity<WorkoutModel> updateWorkoutModel(@PathVariable("id") long id, @RequestBody WorkoutModel workoutModelRequest) {
         WorkoutModel workoutModel = workoutModelDetailsService.findById(id);
 
@@ -230,14 +230,14 @@ private final UserModelRepository userModelRepository;
         return new ResponseEntity<>(workoutModelDetailsService.save(workoutModel), HttpStatus.OK);
     }
 
-    @DeleteMapping("/workoutModels/{id}")
+    @DeleteMapping("/workouts/{id}")
     public ResponseEntity<HttpStatus> deleteWorkoutModel(@PathVariable("id") long id) {
         workoutModelDetailsService.deleteById(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/userModels/{userModelId}/workoutModels")
+    @DeleteMapping("/users/{userModelId}/workouts")
     public ResponseEntity<List<WorkoutModel>> deleteAllWorkoutModelsOfUserModel(@PathVariable(value = "userModelId") Long userModelId) {
 
         workoutModelDetailsService.deleteByUserModelId(userModelId);
