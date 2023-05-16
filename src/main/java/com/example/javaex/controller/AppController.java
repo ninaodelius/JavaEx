@@ -158,6 +158,7 @@ private final UserModelRepository userModelRepository;
             _userModel.setName(userModel.getName());
             _userModel.setUsername(userModel.getUsername());
             _userModel.setPassword(userModel.getPassword());
+            _userModel.setHasRegisteredWorkouts(userModel.isHasRegisteredWorkouts());
 
             return new ResponseEntity<>(userModelDetailsService.save(_userModel), HttpStatus.OK);
         }
@@ -212,7 +213,12 @@ private final UserModelRepository userModelRepository;
         //workoutModelToSave.setUserModel(userModelToSave);
         WorkoutModel workoutModelToSave = userModelRepository.findById(userModelId).map(userModel -> {
             workoutModelRequest.setUserModel(userModel);
-            return workoutModelDetailsService.save(workoutModelRequest);}).orElseThrow(() -> new Exception("Not found user with id = " + userModelId));
+                    UserModel userModelGettingWorkout = userModelDetailsService.findById(userModelId);
+                    userModelGettingWorkout.setHasRegisteredWorkouts(true);
+                    userModelDetailsService.save(userModelGettingWorkout);
+            return workoutModelDetailsService.save(workoutModelRequest);
+        })
+                .orElseThrow(() -> new Exception("Not found user with id = " + userModelId));
 
         return new ResponseEntity<>(workoutModelToSave, HttpStatus.CREATED);
     }

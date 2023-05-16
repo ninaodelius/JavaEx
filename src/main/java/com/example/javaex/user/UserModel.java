@@ -1,6 +1,5 @@
 package com.example.javaex.user;
 
-import com.example.javaex.user.workout.WorkoutModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -38,8 +37,8 @@ public class UserModel implements UserDetails {
     @Column
     private boolean hasRegisteredWorkouts;
 
-    @OneToMany(mappedBy = "userModel")
-    private Set<WorkoutModel> workoutModels;
+    //@OneToMany(mappedBy = "userModel")
+    //private Set<WorkoutModel> workoutModels;
 
 
 
