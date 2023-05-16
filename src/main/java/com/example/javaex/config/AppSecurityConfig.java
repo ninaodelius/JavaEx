@@ -43,10 +43,10 @@ public class AppSecurityConfig {
 //        corsConfiguration.setExposedHeaders(List.of("Authorization"));
 
         http
-                //.csrf().disable()
+                .csrf().disable()
                 .authorizeHttpRequests( requests -> {
                            // try {
-                                requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**",  "/signin", "/login", "/signup", "/logout").permitAll()
+                                requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**",  "/signin", "/login", "/signup", "/logout", "/api/users").permitAll()
                                         .requestMatchers("/home", "/user").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()
