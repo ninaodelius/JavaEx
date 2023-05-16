@@ -74,6 +74,13 @@ private final UserModelRepository userModelRepository;
     public String showAdminpage(){
         return "adminpage";
     }
+
+    @GetMapping("/workout")
+    public String showWorkouts(Model theModel, WorkoutModel workoutModel, @RequestParam("id")Long userModelId){
+        theModel.addAttribute("workouts", workoutModelDetailsService.findByUserModelId(userModelId));
+
+        return "workouts";
+    }
     /*@PostMapping("/{userid}/saveNewWorkout")
     public void saveNewWorkout(@RequestBody WorkoutModel workoutModel, @PathVariable("userid")Long userid){
         UserModel userModelGettingWorkOut = findUserById(userid);

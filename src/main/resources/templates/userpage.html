@@ -28,7 +28,7 @@
                 weather</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link disabled">Workouts</a>
+            <a th:href="@{/workout(id=${#authentication.principal.id})}" class="nav-link">Workouts</a>
         </li>
         <li class="nav-item">
             <a th:href="@{/logout}" class="nav-link" type="submit">log out</a>

@@ -15,6 +15,10 @@ public class WorkoutModelDetailsService {
     public WorkoutModelDetailsService(WorkoutModelRepository workoutModelRepository){
         this.workoutModelRepository = workoutModelRepository;
     }
+    public List<WorkoutModel> findAll(){
+        return workoutModelRepository.findAll();
+    }
+
 
     public WorkoutModel save(WorkoutModel workoutModel){
         return workoutModelRepository.save(workoutModel);

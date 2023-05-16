@@ -47,7 +47,7 @@ public class AppSecurityConfig {
                 .authorizeHttpRequests( requests -> {
                            // try {
                                 requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**",  "/signin", "/login", "/signup", "/logout", "/api/users").permitAll()
-                                        .requestMatchers("/home", "/user").hasRole("USER")
+                                        .requestMatchers("/home", "/user", "/workout").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()
                                         /*.and().csrf().disable().cors().configurationSource(request -> corsConfiguration)*/;
