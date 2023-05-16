@@ -1,2 +1,2 @@
 rootProject.name = 'JavaEx'
-include ':JavaScriptEx', 'JavaEx'
+//include ':JavaScriptEx', 'JavaEx'

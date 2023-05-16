@@ -1,25 +1,19 @@
 package com.example.javaex.controller;
 
 import com.example.javaex.config.AppPasswordConfig;
-import com.example.javaex.config.HibernateAnnotationUtil;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelDetailsService;
 import com.example.javaex.user.UserModelRepository;
 import com.example.javaex.user.workout.WorkoutModel;
 import com.example.javaex.user.workout.WorkoutModelDetailsService;
 import com.example.javaex.weatherAPI.WeatherWebClient;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @CrossOrigin
 @RestController /*RestController for postman*/
@@ -63,7 +57,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    @PostMapping("/{userid}/saveNewWorkout")
+    /*@PostMapping("/{userid}/saveNewWorkout")
     public void saveNewWorkout(@RequestBody WorkoutModel workoutModel, @PathVariable("userid")Long userid){
         UserModel userModelGettingWorkOut = findUserById(userid);
         System.out.println(userModelGettingWorkOut);
@@ -80,7 +74,7 @@ public class UserController {
         workoutModel = session.get(WorkoutModel.class, userid);
         tx.commit();
         System.out.println(workoutModel);
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable("id")Long id){ userModelDetailsService.deleteById(id);}

@@ -1,19 +1,7 @@
 package com.example.javaex.config;
 
-import com.example.javaex.user.UserModel;
-import com.example.javaex.user.workout.WorkoutModel;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Environment;
-import org.hibernate.service.ServiceRegistry;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class HibernateAnnotationUtil{
-
+/*
 public static SessionFactory getSessionFactory() {
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -38,5 +26,5 @@ private static Map<String, Object> dbSettings() {
     dbSettings.put(Environment.SHOW_SQL, "true");
     dbSettings.put(Environment.HBM2DDL_AUTO, "create");
     return dbSettings;
-        }
+        }*/
 }

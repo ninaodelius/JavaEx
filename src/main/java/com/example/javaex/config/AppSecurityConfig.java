@@ -16,7 +16,6 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-//@Profile("!https")
 public class AppSecurityConfig {
 
     private final UserModelDetailsService userModelDetailsService;
@@ -46,15 +45,15 @@ public class AppSecurityConfig {
         http
                 //.csrf().disable()
                 .authorizeHttpRequests( requests -> {
-                            try {
-                                requests.requestMatchers( "/", "/api", "/save", "/signin", "/login", "/signup", "/logout").permitAll()
+                           // try {
+                                requests.requestMatchers( "/", "/api", "/save","/static/**",  "/signin", "/login", "/signup", "/logout").permitAll()
                                         .requestMatchers("/home", "/user").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()
                                         /*.and().csrf().disable().cors().configurationSource(request -> corsConfiguration)*/;
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            //} catch (Exception e) {
+                            //    e.printStackTrace();
+                           // }
 
                         }
                 )
