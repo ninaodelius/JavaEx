@@ -5,16 +5,12 @@ import com.example.javaex.user.workout.WorkoutModelDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -39,22 +35,23 @@ public class AppSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterchain(HttpSecurity http) throws Exception{
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-        corsConfiguration.setAllowedOriginPatterns(List.of("*"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
-        corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setExposedHeaders(List.of("Authorization"));
+       /**react**/
+//        CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+//        corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+//        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
+//        corsConfiguration.setAllowCredentials(true);
+//        corsConfiguration.setExposedHeaders(List.of("Authorization"));
 
         http
-                .csrf().disable()
+                //.csrf().disable()
                 .authorizeHttpRequests( requests -> {
                             try {
-                                requests.requestMatchers("/index*", "/static/**", "/*.js", "/*.json", "/*.ico", "/", "/api", "/save", "/test", "/signin", "/api**", "/**").permitAll()
-                                        .requestMatchers("/home").hasRole("USER")
+                                requests.requestMatchers( "/", "/api", "/save", "/signin", "/login", "/signup", "/logout").permitAll()
+                                        .requestMatchers("/home", "/user").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()
-                                        .and().csrf().disable().cors().configurationSource(request -> corsConfiguration);
+                                        /*.and().csrf().disable().cors().configurationSource(request -> corsConfiguration)*/;
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -62,10 +59,11 @@ public class AppSecurityConfig {
                         }
                 )
                 .formLogin( formlogin -> {
-                    formlogin.loginPage("/signin")
-                            .loginProcessingUrl("/perform_signin")
-                            .defaultSuccessUrl("/home",true)
-                            .failureUrl("/signin?error=true")
+                    formlogin.loginPage("/login")
+                            /**react**/
+                            //.loginProcessingUrl("/perform_signin")
+                            //.defaultSuccessUrl("/home",true)
+                            //.failureUrl("/signin?error=true")
                     ;
                 }
                 )
@@ -95,9 +93,9 @@ public class AppSecurityConfig {
         provider.setPasswordEncoder(appPasswordConfig.bCryptPassword());
         return provider;
     }
-
+/*
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }
+    }*/
 }

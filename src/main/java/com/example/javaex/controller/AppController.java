@@ -1,33 +1,25 @@
 package com.example.javaex.controller;
 
 import com.example.javaex.config.AppPasswordConfig;
-import com.example.javaex.config.HibernateAnnotationUtil;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelDetailsService;
 import com.example.javaex.user.UserModelRepository;
 import com.example.javaex.user.workout.WorkoutModel;
 import com.example.javaex.user.workout.WorkoutModelDetailsService;
 import com.example.javaex.weatherAPI.WeatherWebClient;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-@CrossOrigin
-@RestController /*RestController for postman*/
-@RequestMapping("/api")
+/**react **/
+//@CrossOrigin
+
+@Controller
 public class  AppController {
 
 
@@ -35,33 +27,48 @@ public class  AppController {
     private final WorkoutModelDetailsService workoutModelDetailsService;
     private final WeatherWebClient weatherWebClient;
     private final AppPasswordConfig appPasswordConfig;
-    private final AuthenticationManager authenticationManager;
+    //private final AuthenticationManager authenticationManager;
 private final UserModelRepository userModelRepository;
     @Autowired
-    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService, WeatherWebClient weatherWebClient, AppPasswordConfig appPasswordConfig, AuthenticationManager authenticationManager, UserModelRepository userModelRepository) {
+    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService, WeatherWebClient weatherWebClient, AppPasswordConfig appPasswordConfig, /*AuthenticationManager authenticationManager,*/ UserModelRepository userModelRepository) {
         this.userModelDetailsService = userModelDetailsService;
         this.workoutModelDetailsService = workoutModelDetailsService;
         this.weatherWebClient = weatherWebClient;
         this.appPasswordConfig = appPasswordConfig;
-        this.authenticationManager = authenticationManager;
+    //    this.authenticationManager = authenticationManager;
         this.userModelRepository = userModelRepository;
     }
 
-    @GetMapping("/home")
+    /*@GetMapping("/home")
     public List<UserModel> listAllUsers(){
         return userModelDetailsService.findAll();
-    }
+    }*/
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public UserModel findUserById(@PathVariable("id") Long id){
         return userModelDetailsService.findById(id);
+    }*/
+
+    @GetMapping("/signup")
+    public String showSaveNewUser(@RequestBody UserModel userModel){
+        return "signup";
     }
 
-    @PostMapping("/save")
-    public void saveNewUser(@RequestBody UserModel userModel){
-        userModelDetailsService.save(userModel);}
+    @PostMapping("/signup")
+    public String saveNewUser(@RequestBody UserModel userModel){
+        userModelDetailsService.save(userModel);
+    return "redirect:/";
+    }
 
-    @PostMapping("/{userid}/saveNewWorkout")
+    @GetMapping("/user")
+    public String showUserpage(){
+        return "userpage";
+    }
+    @GetMapping("/admin")
+    public String showAdminpage(){
+        return "adminpage";
+    }
+    /*@PostMapping("/{userid}/saveNewWorkout")
     public void saveNewWorkout(@RequestBody WorkoutModel workoutModel, @PathVariable("userid")Long userid){
         UserModel userModelGettingWorkOut = findUserById(userid);
         System.out.println(userModelGettingWorkOut);
@@ -78,22 +85,22 @@ private final UserModelRepository userModelRepository;
         workoutModel = session.get(WorkoutModel.class, userid);
         tx.commit();
         System.out.println(workoutModel);
-    }
+    }*/
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable("id")Long id){ userModelDetailsService.deleteById(id);}
-
-    @PutMapping("/{id}")
+*/
+  /*  @PutMapping("/{id}")
     public void updateUserById(@PathVariable("id")Long id, @RequestBody UserModel userModel){
         userModelDetailsService.updateUser(id,userModel);
     }
-
-    @GetMapping("/test")
+*/
+  /*  @GetMapping("/test")
     public void test(){
         System.out.println("hello");
-    }
+    }*/
 
-    @GetMapping("/signin")
+   /* @GetMapping("/signin")
     public void signin(@RequestParam("username") String username, @RequestParam("password") String password){
 
         try {
@@ -116,7 +123,7 @@ private final UserModelRepository userModelRepository;
             System.out.println("Invalid username or password.");
 
             // Redirect the user to an error page or perform any other necessary actions
-        }}
+        }}*/
 
 
     /** User controller **/
