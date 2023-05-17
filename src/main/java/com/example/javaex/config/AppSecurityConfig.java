@@ -29,9 +29,6 @@ public class AppSecurityConfig {
         this.appPasswordConfig = appPasswordConfig;
     }
 
-    //här lösa cors-problem som kommer från frontend
-
-
     @Bean
     public SecurityFilterChain securityFilterchain(HttpSecurity http) throws Exception{
        /**react**/
@@ -46,8 +43,8 @@ public class AppSecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests( requests -> {
                            // try {
-                                requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**",  "/signin", "/login", "/signup", "/logout", "/api/users", "/workouts/**","/total").permitAll()
-                                        .requestMatchers("/home", "/user", "/workout").hasRole("USER")
+                                requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**", "/signin", "/login", "/signup", "/logout", "/api/users", "/workouts/**","/total").permitAll()
+                                        .requestMatchers("/home", "/user", "/workout", "/delete").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()
                                         /*.and().csrf().disable().cors().configurationSource(request -> corsConfiguration)*/;

@@ -72,4 +72,10 @@ public class WorkoutModelDetailsService {
     public void deleteByUserModelId(Long userModelId) {
         workoutModelRepository.deleteByUserModelId(userModelId);
     }
+
+    public List<WorkoutModel> listAllSortedDistance(Long userModelId) {
+
+
+        return workoutModelRepository.findByUserModelIdOrderByDistanceAsc(userModelId);
+    }
 }

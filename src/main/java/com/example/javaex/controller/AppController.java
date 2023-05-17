@@ -77,68 +77,17 @@ theModel.addAttribute("totalWorkoutCount",getTotalWorkoutsByUserModelId(userMode
     }
 
     @GetMapping("/workout")
-    public String showWorkouts(Model theModel, WorkoutModel workoutModel, @RequestParam("id")Long userModelId){
-        theModel.addAttribute("workouts", workoutModelDetailsService.findByUserModelId(userModelId));
+    public String showWorkouts(Model theModel, WorkoutModel workoutModel, @RequestParam("id")Long userModelId) {
+        theModel.addAttribute("workouts", workoutModelDetailsService.listAllSortedDistance(userModelId));
 
         return "workouts";
     }
-    /*@PostMapping("/{userid}/saveNewWorkout")
-    public void saveNewWorkout(@RequestBody WorkoutModel workoutModel, @PathVariable("userid")Long userid){
-        UserModel userModelGettingWorkOut = findUserById(userid);
-        System.out.println(userModelGettingWorkOut);
-        System.out.println(workoutModel);
-        Set<WorkoutModel> workoutModelSet = new HashSet<>();
-        workoutModelSet.add(workoutModel);
-        System.out.println(workoutModelSet);
-        System.out.println(userModelGettingWorkOut);
 
-        SessionFactory sessionFactory = HibernateAnnotationUtil.getSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
-
-        Transaction tx = session.beginTransaction();
-        workoutModel = session.get(WorkoutModel.class, userid);
-        tx.commit();
-        System.out.println(workoutModel);
-    }*/
-
-    /*@DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable("id")Long id){ userModelDetailsService.deleteById(id);}
-*/
-  /*  @PutMapping("/{id}")
-    public void updateUserById(@PathVariable("id")Long id, @RequestBody UserModel userModel){
-        userModelDetailsService.updateUser(id,userModel);
+    @GetMapping ("/delete")
+    public String delete(@RequestParam("id") Long id){
+        userModelDetailsService.deleteById(id);
+        return "redirect:/";
     }
-*/
-  /*  @GetMapping("/test")
-    public void test(){
-        System.out.println("hello");
-    }*/
-
-   /* @GetMapping("/signin")
-    public void signin(@RequestParam("username") String username, @RequestParam("password") String password){
-
-        try {
-            // Create an authentication token with the provided username and password
-            Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
-
-            // Perform authentication
-            Authentication authenticated = authenticationManager.authenticate(authentication);
-
-            // Set the authenticated user in the security context
-            SecurityContextHolder.getContext().setAuthentication(authenticated);
-
-            // Authentication successful, proceed with further actions
-            System.out.println("User authenticated successfully.");
-
-            // Redirect the user to a success page or perform any other necessary actions
-
-        } catch (Exception e) {
-            // Authentication failed, handle the error accordingly
-            System.out.println("Invalid username or password.");
-
-            // Redirect the user to an error page or perform any other necessary actions
-        }}*/
-
 
     /** User controller **/
 
@@ -275,5 +224,15 @@ theModel.addAttribute("totalWorkoutCount",getTotalWorkoutsByUserModelId(userMode
         workoutModelDetailsService.deleteByUserModelId(userModelId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    /*@RequestMapping("/test")
+    public String viewPage(Model model, @RequestParam("id")Long userModelId) {
+
+        List<WorkoutModel> listWorkoutsByDistance = workoutModelDetailsService.listAllSortedDistance(userModelId);
+
+        model.addAttribute("listWorkoutsByDistance", listWorkoutsByDistance);
+
+        return "workouts";
+    }*/
 
 }
