@@ -66,6 +66,26 @@ private final UserModelRepository userModelRepository;
     return "redirect:/";
     }
 
+    @GetMapping("/postworkout")
+    public String showSaveNewWorkout(WorkoutModel workoutModel){
+        return "postworkout";
+    }
+
+    @PostMapping("/postworkout")
+    public String saveNewWorkout(@RequestParam("id") Long userModelId,@Valid WorkoutModel workoutModelRequest, BindingResult result, Model model){
+        if(result.hasErrors()){
+            return "postworkout";
+        }
+        userModelRepository.findById(userModelId).map(userModel -> {
+            workoutModelRequest.setUserModel(userModel);
+            UserModel userModelGettingWorkout = userModelDetailsService.findById(userModelId);
+            userModelGettingWorkout.setHasRegisteredWorkouts(true);
+            userModelDetailsService.save(userModelGettingWorkout);
+            return workoutModelDetailsService.save(workoutModelRequest);
+        });
+        return "redirect:/";
+    }
+
     @GetMapping("/user")
     public String showUserpage(Model theModel, @RequestParam("id")Long userModelId){
 theModel.addAttribute("totalWorkoutCount",getTotalWorkoutsByUserModelId(userModelId));

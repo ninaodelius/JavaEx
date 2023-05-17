@@ -31,6 +31,9 @@
             <a th:href="@{/workout(id=${#authentication.principal.id})}" class="nav-link">Workouts</a>
         </li>
         <li class="nav-item">
+            <a th:href="@{/postworkout(id=${#authentication.principal.id})}" class="nav-link">Register new workout</a>
+        </li>
+        <li class="nav-item">
             <a th:href="@{/logout}" class="nav-link" type="submit">log out</a>
         </li>
     </ul>
