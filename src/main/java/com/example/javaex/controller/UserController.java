@@ -46,35 +46,12 @@ public class UserController {
         return userModelDetailsService.findById(id);
     }
 
-    @GetMapping("/signup")
-    public String showSaveNewUser(@RequestBody UserModel userModel){
-        return "signup";
-    }
 
-    @PostMapping("/signup")
-    public String saveNewUser(@RequestBody UserModel userModel){
+    @PostMapping("/save")
+    public void saveNewUser(@RequestBody UserModel userModel){
         userModelDetailsService.save(userModel);
-        return "redirect:/";
+
     }
-
-    /*@PostMapping("/{userid}/saveNewWorkout")
-    public void saveNewWorkout(@RequestBody WorkoutModel workoutModel, @PathVariable("userid")Long userid){
-        UserModel userModelGettingWorkOut = findUserById(userid);
-        System.out.println(userModelGettingWorkOut);
-        System.out.println(workoutModel);
-        Set<WorkoutModel> workoutModelSet = new HashSet<>();
-        workoutModelSet.add(workoutModel);
-        System.out.println(workoutModelSet);
-        System.out.println(userModelGettingWorkOut);
-
-        SessionFactory sessionFactory = HibernateAnnotationUtil.getSessionFactory();
-        Session session = sessionFactory.getCurrentSession();
-
-        Transaction tx = session.beginTransaction();
-        workoutModel = session.get(WorkoutModel.class, userid);
-        tx.commit();
-        System.out.println(workoutModel);
-    }*/
 
     @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable("id")Long id){ userModelDetailsService.deleteById(id);}
@@ -89,31 +66,6 @@ public class UserController {
         System.out.println("hello");
     }
 
-    /*@GetMapping("/signin")
-    public void signin(@RequestParam("username") String username, @RequestParam("password") String password){
-
-        try {
-            // Create an authentication token with the provided username and password
-            Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
-
-            // Perform authentication
-            Authentication authenticated = authenticationManager.authenticate(authentication);
-
-            // Set the authenticated user in the security context
-            SecurityContextHolder.getContext().setAuthentication(authenticated);
-
-            // Authentication successful, proceed with further actions
-            System.out.println("User authenticated successfully.");
-
-            // Redirect the user to a success page or perform any other necessary actions
-
-        } catch (Exception e) {
-            // Authentication failed, handle the error accordingly
-            System.out.println("Invalid username or password.");
-
-            // Redirect the user to an error page or perform any other necessary actions
-        }}
-*/
 
     /** User controller **/
 
@@ -199,7 +151,10 @@ public class UserController {
 
         return new ResponseEntity<>(workoutModel, HttpStatus.OK);
     }
-
+    @GetMapping("/workouts/{userModelId}/total")
+    public long getTotalWorkoutsByUserModelId(@PathVariable(value = "userModelId") Long userModelId) {
+        return workoutModelDetailsService.count(userModelId);
+    }
     @PostMapping("/users/{userModelId}/workouts")
     public ResponseEntity<WorkoutModel> createWorkoutModel(@PathVariable(value = "userModelId") Long userModelId,
                                                            @RequestBody WorkoutModel workoutModelRequest) throws Exception {

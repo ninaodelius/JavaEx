@@ -46,7 +46,7 @@ public class AppSecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests( requests -> {
                            // try {
-                                requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**",  "/signin", "/login", "/signup", "/logout", "/api/users").permitAll()
+                                requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**",  "/signin", "/login", "/signup", "/logout", "/api/users", "/workouts/**","/total").permitAll()
                                         .requestMatchers("/home", "/user", "/workout").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()

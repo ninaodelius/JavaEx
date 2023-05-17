@@ -52,6 +52,10 @@ public class WorkoutModelDetailsService {
         return workoutModelRepository.findByUserModelId(userModelId);
     }
 
+    public long count(Long userModelId) {
+        return workoutModelRepository.countAllByUserModel_Id(userModelId);
+    }
+
     public WorkoutModel findById(Long id) {
         Optional<WorkoutModel> result = workoutModelRepository.findById(id);
 

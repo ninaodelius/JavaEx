@@ -67,7 +67,8 @@ private final UserModelRepository userModelRepository;
     }
 
     @GetMapping("/user")
-    public String showUserpage(){
+    public String showUserpage(Model theModel, @RequestParam("id")Long userModelId){
+theModel.addAttribute("totalWorkoutCount",getTotalWorkoutsByUserModelId(userModelId));
         return "userpage";
     }
     @GetMapping("/admin")
@@ -222,6 +223,11 @@ private final UserModelRepository userModelRepository;
         WorkoutModel workoutModel = workoutModelDetailsService.findById(id);
 
         return new ResponseEntity<>(workoutModel, HttpStatus.OK);
+    }
+
+    @GetMapping("/workouts/{userModelId}/total")
+    public long getTotalWorkoutsByUserModelId(@PathVariable(value = "userModelId") Long userModelId) {
+        return workoutModelDetailsService.count(userModelId);
     }
 
     @PostMapping("/users/{userModelId}/workouts")

@@ -39,7 +39,7 @@
     admin</a>
 </span>
          <span th:case="${false}">
-<a th:href="@{/user}"
+<a th:href="@{/user(id=${#authentication.principal.id})}"
    class="btn btn-outline-dark">
     user</a>
 </span>

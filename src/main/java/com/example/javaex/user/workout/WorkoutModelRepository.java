@@ -12,6 +12,8 @@ public interface WorkoutModelRepository extends JpaRepository<WorkoutModel, Long
 
     List<WorkoutModel> findByUserModelId(Long workoutId);
 
+    long countAllByUserModel_Id(Long userModelId);
+
     @Transactional
     void deleteByUserModelId(long userModelId);
 }
