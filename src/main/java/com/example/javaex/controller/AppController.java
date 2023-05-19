@@ -72,17 +72,15 @@ private final UserModelRepository userModelRepository;
     }
 
     @PostMapping("/postworkout")
-    public String saveNewWorkout(@RequestParam("id") Long userModelId,@Valid WorkoutModel workoutModelRequest, BindingResult result, Model model){
+    public String saveNewWorkout(@RequestParam("id") Long userModelId,@Valid WorkoutModel workoutModelRequest, BindingResult result, Model model) throws Exception{
         if(result.hasErrors()){
             return "postworkout";
         }
-        userModelRepository.findById(userModelId).map(userModel -> {
+        WorkoutModel workoutModelToSave = userModelRepository.findById(userModelId).map(userModel -> {
             workoutModelRequest.setUserModel(userModel);
-            UserModel userModelGettingWorkout = userModelDetailsService.findById(userModelId);
-            userModelGettingWorkout.setHasRegisteredWorkouts(true);
-            userModelDetailsService.save(userModelGettingWorkout);
+            userModelDetailsService.findById(userModelId).setHasRegisteredWorkouts(true);
             return workoutModelDetailsService.save(workoutModelRequest);
-        });
+        }).orElseThrow(() -> new Exception("Not found user with id = " + userModelId));
         return "redirect:/";
     }
 
@@ -203,17 +201,14 @@ theModel.addAttribute("totalWorkoutCount",getTotalWorkoutsByUserModelId(userMode
     public ResponseEntity<WorkoutModel> createWorkoutModel(@PathVariable(value = "userModelId") Long userModelId,
                                                  @RequestBody WorkoutModel workoutModelRequest) throws Exception {
 
-        //UserModel userModelToSave = userModelDetailsService.findById(userModelId);
-        //WorkoutModel workoutModelToSave = workoutModelDetailsService.save(workoutModelRequest);
-        //workoutModelToSave.setUserModel(userModelToSave);
         WorkoutModel workoutModelToSave = userModelRepository.findById(userModelId).map(userModel -> {
-            workoutModelRequest.setUserModel(userModel);
-                    UserModel userModelGettingWorkout = userModelDetailsService.findById(userModelId);
-                    userModelGettingWorkout.setHasRegisteredWorkouts(true);
-                    userModelDetailsService.save(userModelGettingWorkout);
+                    workoutModelRequest.setUserModel(userModel);
+                    userModelDetailsService.findById(userModelId).setHasRegisteredWorkouts(true);
             return workoutModelDetailsService.save(workoutModelRequest);
         })
                 .orElseThrow(() -> new Exception("Not found user with id = " + userModelId));
+
+
 
         return new ResponseEntity<>(workoutModelToSave, HttpStatus.CREATED);
     }
