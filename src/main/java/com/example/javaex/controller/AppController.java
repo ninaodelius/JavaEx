@@ -103,8 +103,14 @@ theModel.addAttribute("totalWorkoutCount",getTotalWorkoutsByUserModelId(userMode
 
     @GetMapping ("/delete")
     public String delete(@RequestParam("id") Long id){
+        //userModelDetailsService.findById(id).setCredentialsNonExpired(true);
         userModelDetailsService.deleteById(id);
-        return "redirect:/";
+       // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       // if (!(authentication instanceof AnonymousAuthenticationToken)) {
+       //     String currentUserName = authentication.getName();
+        //    return currentUserName;
+       // }
+        return "redirect:/logout";
     }
 
     /** User controller **/
