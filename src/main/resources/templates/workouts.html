@@ -9,6 +9,33 @@
 <body>
 <div class="jumbotron container text-center">
 
+    <ul class="nav">
+        <li class="nav-item">
+            <a th:href="@{/showUpdate(id=${#authentication.principal.id})}"
+               class="nav-link">
+                Edit your account info
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a th:href="@{/delete(id=${#authentication.principal.id})}" class="nav-link" onclick=" if (!(confirm ('Are you sure you want to delete your account?')))return false"> Delete account </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/fetchWeather}"
+               class="nav-link">
+                weather</a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/workout(id=${#authentication.principal.id})}" class="nav-link">Workouts</a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/postworkout(id=${#authentication.principal.id})}" class="nav-link">Register new workout</a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/logout}" class="nav-link" type="submit">log out</a>
+        </li>
+    </ul>
+
     <table class="table table-hover" >
         <thead>
         <tr>
@@ -29,6 +56,9 @@
             <td th:text="${workout.distance}"></td>
 
     </table>
+    <hr class="my-4">
+
+    <a th:href="@{/user(id=${#authentication.principal.id})}" class="btn btn-outline-secondary">back to userpage</a>
 
 
     <hr class="my-4">

@@ -1,9 +1,12 @@
 package com.example.javaex.user.dao;
 
+import com.example.javaex.exceptionhandler.GeneralException;
+import com.example.javaex.exceptionhandler.UserNotFoundException;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,11 +35,19 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
 
     @Override
     public void delete(Long id) {
-        userModelRepository.deleteById(id);
+        try{
+            userModelRepository.deleteById(id);
+        }catch (Exception e){
+            throw new UserNotFoundException("UserModel id not found: "+id);
+        }
+
     }
 
     @Override
     public List<UserModel> findAll() {
+        if (userModelRepository.findAll().size()<=0){
+            throw new UserNotFoundException("No UserModels found");
+        }
         return userModelRepository.findAll();
     }
 
@@ -49,14 +60,14 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
         if(result.isPresent()){
             foundUser=result.get();
         }else{
-            throw new RuntimeException("Did not find id: " + id);
+            throw new UserNotFoundException("Did not find id: " + id);
         }
         return foundUser;
     }
 
-    @Override
+    @Transactional
     public void updateUser(Long id, UserModel userModel){
-
+        try{
         UserModel userToUpdate = findById(id);
 
         if (userModel.getName() != null) { userToUpdate.setName(userModel.getName()); }
@@ -69,6 +80,9 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
         userToUpdate.setEnabled(true);
 
         userModelRepository.save(userToUpdate);
+        }catch (Exception e){
+            throw new GeneralException("Failed to update UserModel with id: "+id);
+        }
     }
 
     @Override
