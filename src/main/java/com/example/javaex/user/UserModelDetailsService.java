@@ -1,6 +1,7 @@
 package com.example.javaex.user;
 
 import com.example.javaex.config.AppPasswordConfig;
+import com.example.javaex.exceptionhandler.GeneralException;
 import com.example.javaex.user.auth.UserRoles;
 import com.example.javaex.user.dao.UserModelDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,31 @@ public class UserModelDetailsService implements UserDetailsService {
 
 
     public void updateUser(Long id, UserModel userModel){
-        userModelDAO.updateUser(id,userModel);
+        try{
+
+            UserModel userToUpdate = findById(id);
+
+        if (userModel.getName() != null) { userToUpdate.setName(userModel.getName()); }
+        if (userModel.getUsername() != null) { userToUpdate.setUsername(userModel.getUsername()); }
+        if (userModel.getPassword() != null) { userToUpdate.setPassword(appPasswordConfig.bCryptPassword().encode(userModel.getPassword())); }
+
+        userToUpdate.setAccountNonExpired(true);
+        userToUpdate.setAccountNonLocked(true);
+        userToUpdate.setCredentialsNonExpired(true);
+        userToUpdate.setEnabled(true);
+
+        if(userModel.getAuthorities() != null){
+            String role = String.valueOf(userToUpdate.getAuthorities().iterator().next());
+
+            switch (role) {
+                case "Admin" ->  userToUpdate.setAuthorities(UserRoles.ADMIN.getGrantedAuthorities());
+                case "User" -> userToUpdate.setAuthorities(UserRoles.USER.getGrantedAuthorities());
+            }
+        }
+        userModelDAO.updateUser(userToUpdate);
+    }catch (Exception e){
+        throw new GeneralException("Failed to update UserModel with id: "+id);
+    }
     }
 
     public List<UserModel> findByNameContaining(String name) {

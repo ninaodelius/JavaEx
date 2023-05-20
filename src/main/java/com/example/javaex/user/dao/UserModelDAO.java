@@ -1,6 +1,5 @@
 package com.example.javaex.user.dao;
 
-import com.example.javaex.exceptionhandler.GeneralException;
 import com.example.javaex.exceptionhandler.UserNotFoundException;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelRepository;
@@ -66,23 +65,11 @@ public class UserModelDAO implements IUserModelDAO<UserModel>{
     }
 
     @Transactional
-    public void updateUser(Long id, UserModel userModel){
-        try{
-        UserModel userToUpdate = findById(id);
+    public void updateUser(UserModel userModel){
 
-        if (userModel.getName() != null) { userToUpdate.setName(userModel.getName()); }
-        if (userModel.getUsername() != null) { userToUpdate.setUsername(userModel.getUsername()); }
-        if (userModel.getPassword() != null) { userToUpdate.setPassword(userModel.getPassword()); }
 
-        userToUpdate.setAccountNonExpired(true);
-        userToUpdate.setAccountNonLocked(true);
-        userToUpdate.setCredentialsNonExpired(true);
-        userToUpdate.setEnabled(true);
+        userModelRepository.save(userModel);
 
-        userModelRepository.save(userToUpdate);
-        }catch (Exception e){
-            throw new GeneralException("Failed to update UserModel with id: "+id);
-        }
     }
 
     @Override
