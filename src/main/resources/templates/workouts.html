@@ -43,18 +43,37 @@
             <th scope="col">Start time</th>
             <th scope="col">End time</th>
             <th scope="col">Category</th>
-            <th scope="col">Distance</th>
+            <th scope="col">
+            <a th:href="@{/workouts(thisisgoingtosortbydistance)}"
+               class="sortable-header">
+                Distance
+            </a>       </th>
+            <th scope="col">
+
+            <a th:href="@{/workouts(thisisgoingtosortbyduration)}"
+                   class="sortable-header">
+                    Duration
+                </a>       </th>
+            <th scope="col">
+
+            <a th:href="@{/workouts(thisisgoingtosortbypace)}"
+                   class="sortable-header">
+                    Pace
+                </a>
+            </th>
+
 
         </tr>
         </thead>
         <tbody>
         <tr th:each="workout : ${workouts}">
-            <td th:text="${workout.dateOfWorkout}"></td>
-            <td th:text="${workout.timeStartWorkout}"></td>
-            <td th:text="${workout.timeEndWorkout}"></td>
+            <td th:text="${#dates.format(workout.dateOfWorkout, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#dates.format(workout.timeStartWorkout, 'HH:mm')}"></td>
+            <td th:text="${#dates.format(workout.timeEndWorkout, 'HH:mm')}"></td>
             <td th:text="${workout.workoutCategory}"></td>
             <td th:text="${workout.distance}"></td>
-
+            <td th:text="${workout.movingTime}"></td>
+            <td th:text="${workout.pace}"></td>
     </table>
     <hr class="my-4">
 

@@ -16,6 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,9 +79,37 @@ private final UserModelRepository userModelRepository;
         if(result.hasErrors()){
             return "postworkout";
         }
+
         WorkoutModel workoutModelToSave = userModelRepository.findById(userModelId).map(userModel -> {
             workoutModelRequest.setUserModel(userModel);
             userModelDetailsService.findById(userModelId).setHasRegisteredWorkouts(true);
+
+            LocalTime start = workoutModelRequest.getTimeStartWorkout().toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+            LocalTime end = workoutModelRequest.getTimeEndWorkout().toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+
+            Duration duration = Duration.between(start, end);
+            workoutModelRequest.setDuration(duration);
+
+            long durationInSeconds = workoutModelRequest.getDuration().toSeconds();
+            long durationMinutes = workoutModelRequest.getDuration().toMinutes();
+            long durationHours = workoutModelRequest.getDuration().toHours();
+
+            String durationString = String.format("%02d:%02d:%02d",
+                    durationHours,
+                    (durationMinutes % 60),
+                    (durationInSeconds % 60));
+
+            workoutModelRequest.setMovingTime(durationString);
+
+            double distanceInKm = workoutModelRequest.getDistance();
+            double paceInMinutes = durationInSeconds / distanceInKm / 60;
+
+            int paceMinutes = (int) paceInMinutes;
+            int paceSeconds = (int) ((paceInMinutes - paceMinutes) * 60);
+
+            String pace = String.format("%02d:%02d", paceMinutes, paceSeconds);
+            workoutModelRequest.setPace(pace);
+
             return workoutModelDetailsService.save(workoutModelRequest);
         }).orElseThrow(() -> new Exception("Not found user with id = " + userModelId));
         return "redirect:/";
