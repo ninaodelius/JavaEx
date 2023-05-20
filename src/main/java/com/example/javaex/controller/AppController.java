@@ -4,6 +4,7 @@ import com.example.javaex.config.AppPasswordConfig;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelDetailsService;
 import com.example.javaex.user.UserModelRepository;
+import com.example.javaex.user.auth.UserRoles;
 import com.example.javaex.user.workout.WorkoutModel;
 import com.example.javaex.user.workout.WorkoutModelDetailsService;
 import com.example.javaex.weatherAPI.WeatherWebClient;
@@ -182,7 +183,47 @@ theModel.addAttribute("totalWorkoutCount",getTotalWorkoutsByUserModelId(userMode
             return new ResponseEntity<>(userModels, HttpStatus.OK);
         }
 
-        /** Workout controller **/
+
+    @GetMapping("/showUpdate")
+    public String showInfo(@RequestParam("id")Long id, Model model){
+
+        UserModel theUserModel = userModelDetailsService.findById(id);
+
+        model.addAttribute("user", theUserModel);
+
+        return "userpageedit";
+    }
+
+    @PostMapping("/updateById")
+    public String saveInfo(@ModelAttribute("user") UserModel theUserModel, Long id){
+
+        UserModel userToUpdate = userModelDetailsService.findById(id);
+
+        if (theUserModel.getName() != null) {userToUpdate.setName(theUserModel.getName());}
+        if (theUserModel.getUsername() != null) {userToUpdate.setUsername(theUserModel.getUsername());}
+        //if (theUserModel.getPassword() != null) {userToUpdate.setPassword(theUserModel.getPassword());}
+
+        userToUpdate.setAccountNonExpired(true);
+        userToUpdate.setAccountNonLocked(true);
+        userToUpdate.setCredentialsNonExpired(true);
+        userToUpdate.setEnabled(true);
+
+        if(theUserModel.getAuthorities() != null){
+            String role = String.valueOf(userToUpdate.getAuthorities().iterator().next());
+
+            switch (role) {
+                case "Admin" ->  userToUpdate.setAuthorities(UserRoles.ADMIN.getGrantedAuthorities());
+                case "User" -> userToUpdate.setAuthorities(UserRoles.USER.getGrantedAuthorities());
+            }
+        }
+        userModelDetailsService.save(userToUpdate);
+
+        return"redirect:/";
+    }
+
+
+
+    /** Workout controller **/
 
     @GetMapping("/users/{userModelId}/workouts")
     public ResponseEntity<List<WorkoutModel>> getAllWorkoutModelsByUserModelId(@PathVariable(value = "userModelId") Long userModelId) {
