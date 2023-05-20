@@ -41,8 +41,17 @@ public class UserModelDetailsService implements UserDetailsService {
     //    return userModelDAO.findByUsername(name);
     //}
 
+   // @AssertTrue(message = "Password and confirm password must match")
+    //public boolean isPasswordConfirmed() {
+     //   return password != null && password.equals(passwordConfirmed);
+    //}
+
     public UserModel save(UserModel userModel){
-        userModel.setPassword(appPasswordConfig.bCryptPassword().encode(userModel.getPassword()));
+
+
+            userModel.setPassword(appPasswordConfig.bCryptPassword().encode(userModel.getPassword()));
+
+
         userModel.setAccountNonExpired(true);
         userModel.setAccountNonLocked(true);
         userModel.setCredentialsNonExpired(true);
@@ -85,7 +94,9 @@ public class UserModelDetailsService implements UserDetailsService {
 
         if (userModel.getName() != null) { userToUpdate.setName(userModel.getName()); }
         if (userModel.getUsername() != null) { userToUpdate.setUsername(userModel.getUsername()); }
-        if (userModel.getPassword() != null) { userToUpdate.setPassword(appPasswordConfig.bCryptPassword().encode(userModel.getPassword())); }
+            if (userModel.getPassword() != null) {
+                userToUpdate.setPassword(appPasswordConfig.bCryptPassword().encode(userModel.getPassword()));
+            }
 
         userToUpdate.setAccountNonExpired(true);
         userToUpdate.setAccountNonLocked(true);

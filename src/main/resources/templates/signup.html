@@ -26,6 +26,9 @@
             <label for="password">Password</label>
             <input id="password" class="form-control" type="password" th:field="*{password}" placeholder="password">
 
+            <label for="passwordConfirmedvar">Confirm password</label>
+            <input id="passwordConfirmedvar" class="form-control" type="password" th:field="*{passwordConfirmedvar}" placeholder="confirm password">
+
             <div>
                 <label>
                     <input th:field="*{authorities}" type="checkbox" th:text="Admin" value="Admin"/>

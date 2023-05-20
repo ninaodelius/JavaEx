@@ -60,11 +60,34 @@ private final UserModelRepository userModelRepository;
     @PostMapping("/signup")
     public String saveNewUser(@Valid UserModel userModel, BindingResult result, Model model){
         if(result.hasErrors()){
+            result.getAllErrors();
             return "signup";
         }
-        userModelDetailsService.save(userModel);
+        if (userModel.isPasswordConfirmed()) {userModelDetailsService.save(userModel);}
     return "redirect:/";
     }
+
+    @GetMapping("/showUpdate")
+    public String showInfo(@RequestParam("id")Long id, Model model){
+
+        UserModel theUserModel = userModelDetailsService.findById(id);
+
+        model.addAttribute("user", theUserModel);
+
+        return "userpageedit";
+    }
+
+    @PostMapping("/updateById")
+    public String saveInfo(@Valid @ModelAttribute("user") UserModel theUserModel, Long id, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            System.out.println("update did not work");
+            return "userpageedit";
+        }
+        userModelDetailsService.updateUser(id,theUserModel);
+
+        return"redirect:/";
+    }
+
 
     @GetMapping("/postworkout")
     public String showSaveNewWorkout(WorkoutModel workoutModel){
@@ -181,25 +204,6 @@ theModel.addAttribute("totalWorkoutCount",getTotalWorkoutsByUserModelId(userMode
 
             return new ResponseEntity<>(userModels, HttpStatus.OK);
         }
-
-
-    @GetMapping("/showUpdate")
-    public String showInfo(@RequestParam("id")Long id, Model model){
-
-        UserModel theUserModel = userModelDetailsService.findById(id);
-
-        model.addAttribute("user", theUserModel);
-
-        return "userpageedit";
-    }
-
-    @PostMapping("/updateById")
-    public String saveInfo(@ModelAttribute("user") UserModel theUserModel, Long id){
-
-        userModelDetailsService.updateUser(id,theUserModel);
-
-        return"redirect:/";
-    }
 
 
 
