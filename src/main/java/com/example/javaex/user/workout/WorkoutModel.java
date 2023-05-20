@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,9 +31,16 @@ public class WorkoutModel {
     @JsonIgnore
     private UserModel userModel;
 
-    private String dateOfWorkout;
-    private String timeStartWorkout;
-    private String timeEndWorkout;
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        private Date dateOfWorkout;
+
+    @DateTimeFormat(pattern = "HH:mm")
+    private Date timeStartWorkout;
+
+    @DateTimeFormat(pattern = "HH:mm")
+    private Date timeEndWorkout;
+
     private String workoutCategory;
-    private String distance;
+
+    private double distance;
 }
