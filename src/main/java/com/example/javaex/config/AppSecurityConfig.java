@@ -44,7 +44,7 @@ public class AppSecurityConfig {
                 .authorizeHttpRequests( requests -> {
                            // try {
                                 requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**", "/signin", "/login", "/signup", "/logout", "/api/users", "/workouts/**","/total").permitAll()
-                                        .requestMatchers("/home", "/user", "/workout", "/delete", "/showUpdate", "updateById").hasRole("USER")
+                                        .requestMatchers("/home", "/user", "/workout", "/delete", "/showUpdate", "updateById", "stravaApi").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()
                                         /*.and().csrf().disable().cors().configurationSource(request -> corsConfiguration)*/;

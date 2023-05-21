@@ -1,6 +1,7 @@
 package com.example.javaex.controller;
 
 import com.example.javaex.config.AppPasswordConfig;
+import com.example.javaex.stravaAPI.WorkoutWebClient;
 import com.example.javaex.user.UserModel;
 import com.example.javaex.user.UserModelDetailsService;
 import com.example.javaex.user.UserModelRepository;
@@ -34,14 +35,17 @@ public class  AppController {
     private final WeatherWebClient weatherWebClient;
     private final AppPasswordConfig appPasswordConfig;
     //private final AuthenticationManager authenticationManager;
+    private final WorkoutWebClient workoutWebClient;
+
 private final UserModelRepository userModelRepository;
     @Autowired
-    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService, WeatherWebClient weatherWebClient, AppPasswordConfig appPasswordConfig, /*AuthenticationManager authenticationManager,*/ UserModelRepository userModelRepository) {
+    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService, WeatherWebClient weatherWebClient, AppPasswordConfig appPasswordConfig, /*AuthenticationManager authenticationManager,*/ WorkoutWebClient workoutWebClient, UserModelRepository userModelRepository) {
         this.userModelDetailsService = userModelDetailsService;
         this.workoutModelDetailsService = workoutModelDetailsService;
         this.weatherWebClient = weatherWebClient;
         this.appPasswordConfig = appPasswordConfig;
-    //    this.authenticationManager = authenticationManager;
+        this.workoutWebClient = workoutWebClient;
+        //    this.authenticationManager = authenticationManager;
         this.userModelRepository = userModelRepository;
     }
 
@@ -54,6 +58,15 @@ private final UserModelRepository userModelRepository;
     public UserModel findUserById(@PathVariable("id") Long id){
         return userModelDetailsService.findById(id);
     }*/
+
+    @GetMapping("/fetchAthleteInfo")
+    public String fetchAthleteInfo(Model model){
+
+
+        model.addAttribute("athlete", workoutWebClient.monoToList());
+
+        return "stravaApi";
+    }
 
     @GetMapping("/signup")
     public String showSaveNewUser(UserModel userModel){
