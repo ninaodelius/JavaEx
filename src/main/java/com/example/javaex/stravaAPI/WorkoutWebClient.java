@@ -52,6 +52,7 @@ public class WorkoutWebClient {
                 .bodyToFlux(ActivityStats.class);
     }*/
     public Mono<ActivityStats> getActivityStats() {
+        //get athleteId from https://www.strava.com/api/v3/athlete + Authorization : Bearer xxxxxxxxx
         String athleteId = "107540269";
         return webClient.get()
                 .uri("/athletes/"+athleteId+"/stats")
