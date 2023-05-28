@@ -13,12 +13,14 @@ public class WorkoutWebClient {
 
     private WebClient webClient;
 
+    //Bearer token must be updated every 6h
     public WorkoutWebClient() {
         this.webClient = WebClient.builder()
                 .baseUrl("https://www.strava.com/api/v3")
-                .defaultHeader("Authorization", "Bearer 72953655900b33f0ffda3c77dc30c25f83f35316")
+                .defaultHeader("Authorization", "Bearer 45f11d78c592d16f2382f8a68f3b5fdb66b42298")
                 .build();
     }
+
 
 
     public Mono<Athlete> getAthleteInfo() {
@@ -32,21 +34,7 @@ public class WorkoutWebClient {
                 });
     }
 
-    public Flux<Athlete> getAllAthletes() {
-        return webClient.get()
-                .uri("/athletes")
-                .retrieve()
-                .bodyToFlux(Athlete.class);
-    }
-
-    public List<Athlete> fluxToList(){
-        WorkoutWebClient client = new WorkoutWebClient();
-
-        Flux<Athlete> athleteFlux = client.getAllAthletes();
-
-    return athleteFlux.collectList().block();
-    }
-
+    //to get athlete info
     public List<Athlete> monoToList(){
         return getAthleteInfo()
                 .flux()
@@ -54,5 +42,55 @@ public class WorkoutWebClient {
                 .block();
     }
 
+    /*public Flux<ActivityStats> getActivityStats() {
+        //athlete id must be updated
+        String athleteId = "107540269";
+        return webClient.get()
+                .uri("/athletes/"+athleteId+"/stats")
+               // .header("Authorization", "Bearer 45f11d78c592d16f2382f8a68f3b5fdb66b42298")
+                .retrieve()
+                .bodyToFlux(ActivityStats.class);
+    }*/
+    public Mono<ActivityStats> getActivityStats() {
+        String athleteId = "107540269";
+        return webClient.get()
+                .uri("/athletes/"+athleteId+"/stats")
+                .retrieve()
+                .bodyToMono(ActivityStats.class)
+                .map(activityRequest -> {
+                    System.out.println(activityRequest);
+                    return activityRequest;
+                });
+    }
+    public List<ActivityStats> monoActivitiesToList(){
+        return getActivityStats()
+                .flux()
+                .collectList()
+                .block();
+    }
+
+    //to get activitystats
+    /*public List<ActivityStats> fluxToList(){
+        WorkoutWebClient client = new WorkoutWebClient();
+
+        Flux<ActivityStats> activityStatsFlux = client.getActivityStats();
+    return activityStatsFlux.collectList().block();
+    }*/
+
+/*
+    public List<AthleteStats> monoStatToList(){
+        return getAthleteStats()
+                .flux()
+                .collectList()
+                .block();
+    }*/
+
+
+    public Flux<Athlete> getAllAthletes() {
+        return webClient.get()
+                .uri("/athletes")
+                .retrieve()
+                .bodyToFlux(Athlete.class);
+    }
 
 }

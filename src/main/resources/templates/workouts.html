@@ -21,9 +21,9 @@
             <a th:href="@{/delete(id=${#authentication.principal.id})}" class="nav-link" onclick=" if (!(confirm ('Are you sure you want to delete your account?')))return false"> Delete account </a>
         </li>
         <li class="nav-item">
-            <a th:href="@{/fetchWeather}"
+            <a th:href="@{/fetchAthleteInfo}"
                class="nav-link">
-                weather</a>
+                Strava</a>
         </li>
         <li class="nav-item">
             <a th:href="@{/workout(id=${#authentication.principal.id})}" class="nav-link">Workouts</a>
