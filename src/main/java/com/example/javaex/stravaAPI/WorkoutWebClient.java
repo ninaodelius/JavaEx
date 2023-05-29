@@ -31,13 +31,13 @@ public class WorkoutWebClient {
     }
 
     //Bearer token must be updated every 6h
-    public WorkoutWebClient() {
+    /*public WorkoutWebClient() {
         this.webClient = WebClient.builder()
                 .baseUrl("https://www.strava.com/api/v3")
                 .defaultHeader("Authorization", "Bearer "+authBearer)
                 .build();
     }
-
+*/
 
 
     public Mono<Athlete> getAthleteInfo() {
