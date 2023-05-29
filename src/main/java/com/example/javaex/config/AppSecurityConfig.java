@@ -43,8 +43,8 @@ public class AppSecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests( requests -> {
                            // try {
-                                requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**", "/signin", "/login", "/signup", "/logout", "/api/users", "/workouts/**","/total").permitAll()
-                                        .requestMatchers("/home", "/user", "/workout", "/delete", "/showUpdate", "updateById", "stravaApi").hasRole("USER")
+                                requests.requestMatchers( "/", "/api", "/api/**","/save","/static/**", "/signin", "/login", "/signup", "/logout", "/api/users", "/workouts/**","/total", "/users").permitAll()
+                                        .requestMatchers("/home", "/user", "/workout", "/delete", "/showUpdate", "updateById", "stravaApi", "/stravaRouting").hasRole("USER")
                                         .anyRequest()
                                         .authenticated()
                                         /*.and().csrf().disable().cors().configurationSource(request -> corsConfiguration)*/;
@@ -55,12 +55,12 @@ public class AppSecurityConfig {
                         }
                 )
                 .formLogin( formlogin -> {
-                    formlogin.loginPage("/login")
+                    formlogin.loginPage("/login");
                             /**react**/
                             //.loginProcessingUrl("/perform_signin")
                             //.defaultSuccessUrl("/home",true)
                             //.failureUrl("/signin?error=true")
-                    ;
+
                 }
                 )
                 .rememberMe( rememberMe -> {

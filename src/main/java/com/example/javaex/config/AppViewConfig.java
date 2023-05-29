@@ -50,6 +50,8 @@ public class AppViewConfig implements WebMvcConfigurer {
         registry.addViewController("/workouts").setViewName("workouts");
         registry.addViewController("/showUpdate").setViewName("userpageedit");
         registry.addViewController("/fetchAthleteInfo").setViewName("stravaApi");
+        registry.addViewController("/stravaRouting").setViewName("stravaRouter");
+
 
 
     }

@@ -10,14 +10,31 @@ import java.util.List;
 @Service
 public class WorkoutWebClient {
 
-
     private WebClient webClient;
+    private String authBearer;
+    private String athleteId;
+
+    public void setAthleteId(String athleteId){
+        this.athleteId = athleteId;
+        initializeWebClient();
+    }
+    public void setAuthBearer(String authBearer){
+        this.authBearer = authBearer;
+        initializeWebClient();
+    }
+
+    private void initializeWebClient() {
+        this.webClient = WebClient.builder()
+                .baseUrl("https://www.strava.com/api/v3")
+                .defaultHeader("Authorization", "Bearer " + authBearer)
+                .build();
+    }
 
     //Bearer token must be updated every 6h
     public WorkoutWebClient() {
         this.webClient = WebClient.builder()
                 .baseUrl("https://www.strava.com/api/v3")
-                .defaultHeader("Authorization", "Bearer 8d61dda5b02a1e21917dacf4dfb895a299dcb852")
+                .defaultHeader("Authorization", "Bearer "+authBearer)
                 .build();
     }
 
@@ -53,7 +70,7 @@ public class WorkoutWebClient {
     }*/
     public Mono<ActivityStats> getActivityStats() {
         //get athleteId from https://www.strava.com/api/v3/athlete + Authorization : Bearer xxxxxxxxx
-        String athleteId = "107540269";
+        //String athleteId = "107540269";
         return webClient.get()
                 .uri("/athletes/"+athleteId+"/stats")
                 .retrieve()
@@ -93,5 +110,6 @@ public class WorkoutWebClient {
                 .retrieve()
                 .bodyToFlux(Athlete.class);
     }
+
 
 }

@@ -8,6 +8,7 @@ import com.example.javaex.user.UserModelRepository;
 import com.example.javaex.user.workout.WorkoutModel;
 import com.example.javaex.user.workout.WorkoutModelDetailsService;
 import com.example.javaex.weatherAPI.WeatherWebClient;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,15 +37,17 @@ public class  AppController {
     private final AppPasswordConfig appPasswordConfig;
     //private final AuthenticationManager authenticationManager;
     private final WorkoutWebClient workoutWebClient;
+    private final HttpSession session;
 
 private final UserModelRepository userModelRepository;
     @Autowired
-    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService, WeatherWebClient weatherWebClient, AppPasswordConfig appPasswordConfig, /*AuthenticationManager authenticationManager,*/ WorkoutWebClient workoutWebClient, UserModelRepository userModelRepository) {
+    public AppController(UserModelDetailsService userModelDetailsService, WorkoutModelDetailsService workoutModelDetailsService, WeatherWebClient weatherWebClient, AppPasswordConfig appPasswordConfig, /*AuthenticationManager authenticationManager,*/ WorkoutWebClient workoutWebClient, HttpSession session, UserModelRepository userModelRepository) {
         this.userModelDetailsService = userModelDetailsService;
         this.workoutModelDetailsService = workoutModelDetailsService;
         this.weatherWebClient = weatherWebClient;
         this.appPasswordConfig = appPasswordConfig;
         this.workoutWebClient = workoutWebClient;
+        this.session = session;
         //    this.authenticationManager = authenticationManager;
         this.userModelRepository = userModelRepository;
     }
@@ -59,9 +62,52 @@ private final UserModelRepository userModelRepository;
         return userModelDetailsService.findById(id);
     }*/
 
+    @GetMapping("/stravaRouting")
+    public String showStravaRouting(){
+        if(session.getAttribute("authBearer")!=null && session.getAttribute("athleteId")!=null){
+            return "redirect:/fetchAthleteInfo";
+        }
+        return "stravaRouter";
+
+    }
+
+    @PostMapping("/stravaRouting")
+    public String submitStravaRouting(@RequestParam String authBearer, @RequestParam String athleteId){
+
+        //Storing the inputs for this session to use later
+        session.setAttribute("authBearer", authBearer.trim());
+        session.setAttribute("athleteId", athleteId.trim());
+        return "redirect:/fetchAthleteInfo";
+    }
+
+    /*
+    @GetMapping("/removeStravaInfo")
+    public String removeStravaRouting(HttpSession session){
+        session.removeAttribute("authBearer");
+        session.removeAttribute("athleteId");
+        return "StravaRouter";
+    }*/
+    /*
+
+
+    @PostMapping("/fetchUserStravaInfo")
+    public String (@Valid UserModel userModel, BindingResult result, Model model){
+        if(result.hasErrors()){
+            return "signup";
+        }
+        userModelDetailsService.save(userModel);
+        return "redirect:/";
+    }
+     */
+
     @GetMapping("/fetchAthleteInfo")
     public String fetchAthleteInfo(Model model, Model statModel){
         try{
+
+            String authBearer = session.getAttribute("authBearer").toString().trim();
+        String athleteId = session.getAttribute("athleteId").toString().trim();
+        workoutWebClient.setAuthBearer(authBearer);
+        workoutWebClient.setAthleteId(athleteId);
         model.addAttribute("athlete", workoutWebClient.monoToList());
         statModel.addAttribute("activityStats", workoutWebClient.monoActivitiesToList());
         }catch (Exception e){
@@ -167,9 +213,9 @@ theModel.addAttribute("totalWorkoutCount",getTotalWorkoutsByUserModelId(userMode
             List<UserModel> users = new ArrayList<UserModel>();
 
             if (name == null)
-                userModelDetailsService.findAll().forEach(users::add);
+                users.addAll(userModelDetailsService.findAll());
             else
-                userModelDetailsService.findByNameContaining(name).forEach(users::add);
+                users.addAll(userModelDetailsService.findByNameContaining(name));
 
             if (users.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
