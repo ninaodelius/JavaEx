@@ -34,7 +34,10 @@
 </ul>
 
 <div class=" container text-center">
+    <span th:unless="${athlete}">Could not connect to Strava</span>
+
     <div class="card mx-auto" style="width: 18rem;">
+
         <div class="card-body">
             <h5 class="card-title">Strava info</h5>
 
@@ -48,11 +51,17 @@
 
 
             </ul>
+        </div>
 
             <div class="card-body">
                 <h5 class="card-title">Activity info</h5>
     <ul th:each= "activityStat : ${activityStats}" class="list-group list-group-flush">
         <li th:text="'Total runs: '+${activityStat.all_run_totals.count}" class="list-group-item"></li>
+        <li th:text="'Total distance covered: '+${activityStat.all_run_totals.distance}" class="list-group-item"></li>
+        <li th:text="'Total moving time: '+${activityStat.all_run_totals.moving_time}" class="list-group-item"></li>
+        <li th:text="'Total elapsed time: '+${activityStat.all_run_totals.elapsed_time}" class="list-group-item"></li>
+        <li th:text="'Total elevation gain: '+${activityStat.all_run_totals.elevation_gain}" class="list-group-item"></li>
+        <li th:text="'Total achievement count: '+${activityStat.all_run_totals.achievement_count}" class="list-group-item"></li>
         <li th:text="'Biggest climb elevation gain: '+${activityStat.biggest_climb_elevation_gain}" class="list-group-item"></li>
     </ul>
         </div>

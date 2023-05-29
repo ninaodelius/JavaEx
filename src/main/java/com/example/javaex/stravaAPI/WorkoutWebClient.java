@@ -17,7 +17,7 @@ public class WorkoutWebClient {
     public WorkoutWebClient() {
         this.webClient = WebClient.builder()
                 .baseUrl("https://www.strava.com/api/v3")
-                .defaultHeader("Authorization", "Bearer 45f11d78c592d16f2382f8a68f3b5fdb66b42298")
+                .defaultHeader("Authorization", "Bearer 8d61dda5b02a1e21917dacf4dfb895a299dcb852")
                 .build();
     }
 

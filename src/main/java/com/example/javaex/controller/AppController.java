@@ -61,11 +61,13 @@ private final UserModelRepository userModelRepository;
 
     @GetMapping("/fetchAthleteInfo")
     public String fetchAthleteInfo(Model model, Model statModel){
-
-
+        try{
         model.addAttribute("athlete", workoutWebClient.monoToList());
         statModel.addAttribute("activityStats", workoutWebClient.monoActivitiesToList());
-
+        }catch (Exception e){
+            e.printStackTrace();
+            return "stravaApi";
+        }
         return "stravaApi";
     }
 
