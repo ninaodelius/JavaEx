@@ -16,11 +16,9 @@ public class WorkoutWebClient {
 
     public void setAthleteId(String athleteId){
         this.athleteId = athleteId;
-        initializeWebClient();
     }
     public void setAuthBearer(String authBearer){
         this.authBearer = authBearer;
-        initializeWebClient();
     }
 
     private void initializeWebClient() {
@@ -41,6 +39,8 @@ public class WorkoutWebClient {
 
 
     public Mono<Athlete> getAthleteInfo() {
+        initializeWebClient();
+
         return webClient.get()
                 .uri("/athlete")
                 .retrieve()
@@ -71,6 +71,8 @@ public class WorkoutWebClient {
     public Mono<ActivityStats> getActivityStats() {
         //get athleteId from https://www.strava.com/api/v3/athlete + Authorization : Bearer xxxxxxxxx
         //String athleteId = "107540269";
+        initializeWebClient();
+
         return webClient.get()
                 .uri("/athletes/"+athleteId+"/stats")
                 .retrieve()
